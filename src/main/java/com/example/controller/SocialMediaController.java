@@ -38,7 +38,7 @@ public class SocialMediaController {
 
     @PostMapping("/login") // Handle POST requests at /api/login
     public Account loginUser(@RequestBody Account account) throws JsonProcessingException {
-        return accountService.authenticateUser(account);
+        return accountService.authenticateUser(account.getUsername(), account.getPassword());
     }
 
     @PostMapping("/messages") // Handle POST requests at /api/messages
