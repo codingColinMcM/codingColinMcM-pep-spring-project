@@ -53,23 +53,23 @@ public class SocialMediaController {
     }
 
     @GetMapping("/messages/{message_id}") // Handle GET requests at /api/messages/{message_id}
-    public Message getMessageById(@PathVariable Long message_id) {
+    public Message getMessageById(@PathVariable int message_id) {
         return messageService.getMessageById(message_id);
     }
 
     @DeleteMapping("/messages/{message_id}") // Handle DELETE requests at /api/messages/{message_id}
-    public Message deleteMessageById(@PathVariable Long message_id) {
+    public Message deleteMessageById(@PathVariable int message_id) {
         return messageService.deleteMessageById(message_id);
     }
 
     @PutMapping("/messages/{message_id}") // Handle PUT requests at /api/messages/{message_id}
-    public Message updateMessage(@PathVariable Long message_id, @RequestBody Message message) {
+    public Message updateMessage(@PathVariable int message_id, @RequestBody Message message) {
         // Your update logic here
         return messageService.updateMessage(message_id, message);
     }
 
     @GetMapping("/accounts/{account_id}/messages") // Handle GET requests at /api/accounts/{account_id}/messages
-    public List<Message> getMessagesByUser(@PathVariable Long account_id) {
+    public List<Message> getMessagesByUser(@PathVariable int account_id) {
         return messageService.getMessagesByUser(account_id);
     }
 }

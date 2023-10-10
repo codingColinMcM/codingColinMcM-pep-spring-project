@@ -22,11 +22,11 @@ public class MessageService {
         return messageRepository.findAll();
     }
 
-    public Message getMessageById(Long messageId) {
+    public Message getMessageById(int messageId) {
         return messageRepository.findById(messageId).orElse(null);
     }
 
-    public Message deleteMessageById(Long messageId) {
+    public Message deleteMessageById(int messageId) {
         Message message = getMessageById(messageId);
         if (message != null) {
             messageRepository.delete(message);
@@ -34,7 +34,7 @@ public class MessageService {
         return message;
     }
 
-    public Message updateMessage(Long messageId, Message updatedMessage) {
+    public Message updateMessage(int messageId, Message updatedMessage) {
         Message existingMessage = getMessageById(messageId);
         if (existingMessage != null) {
             existingMessage.setMessage_text(updatedMessage.getMessage_text());
@@ -44,7 +44,7 @@ public class MessageService {
         return existingMessage;
     }
 
-    public List<Message> getMessagesByUser(Long postedBy) {
+    public List<Message> getMessagesByUser(int postedBy) {
         return messageRepository.findByPostedBy(postedBy);
     }
 }

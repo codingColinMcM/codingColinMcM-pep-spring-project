@@ -10,6 +10,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     // Custom query method to find an account by username and password
     Account findByUsernameAndPassword(String username, String password);
 
-    // Add other custom query methods if needed
 }
 
