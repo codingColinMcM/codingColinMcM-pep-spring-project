@@ -3,7 +3,6 @@ package com.example.controller;
 import com.example.entity.Account;
 import com.example.entity.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -20,7 +19,7 @@ import com.example.service.MessageService;
  */
 
 @RestController
-@RequestMapping("/api") // Define a base URL for all endpoints
+@RequestMapping("") // Define a base URL for all endpoints
 public class SocialMediaController {
 
     private final AccountService accountService;
