@@ -4,6 +4,8 @@ import com.example.entity.Account;
 import com.example.entity.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class SocialMediaController {
     }
 
     @PostMapping("/messages") // Handle POST requests at /messages
-    public Message createMessage(@RequestBody Message message) throws JsonProcessingException {
+    public ResponseEntity<Object> createMessage(@RequestBody Message message) throws JsonProcessingException {
         return messageService.createMessage(message);
     }
 
@@ -57,12 +59,12 @@ public class SocialMediaController {
     }
 
     @DeleteMapping("/messages/{message_id}") // Handle DELETE requests at /messages/{message_id}
-    public Message deleteMessageById(@PathVariable int message_id) {
+    public int deleteMessageById(@PathVariable int message_id) {
         return messageService.deleteMessageById(message_id);
     }
 
     @PatchMapping("/messages/{message_id}") // Handle PUT requests at /messages/{message_id}
-    public Message updateMessage(@PathVariable int message_id, @RequestBody Message message) {
+    public ResponseEntity<Object> updateMessage(@PathVariable int message_id, @RequestBody Message message) {
         return messageService.updateMessage(message_id, message);
     }
 

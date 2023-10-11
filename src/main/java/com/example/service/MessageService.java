@@ -1,21 +1,33 @@
 package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import com.example.entity.Account;
+import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 import com.example.entity.Message;
 
 @Service
 public class MessageService {
     private final MessageRepository messageRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(MessageRepository messageRepository, AccountRepository accountRepository) {
         this.messageRepository = messageRepository;
+        this.accountRepository = accountRepository;
     }
 
-    public Message createMessage(Message message) {
-        return messageRepository.save(message);
+    public ResponseEntity<Object> createMessage(Message message) {
+        Optional<Account> possibleUser = accountRepository.findById(message.getPosted_by());
+        String messageText = message.getMessage_text();
+        if (!messageText.isBlank() && !(messageText.length() > 255) && possibleUser.isPresent()){
+            return ResponseEntity.ok(messageRepository.save(message));
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public List<Message> getAllMessages() {
@@ -26,22 +38,18 @@ public class MessageService {
         return messageRepository.findById(messageId).orElse(null);
     }
 
-    public Message deleteMessageById(int messageId) {
-        Message message = getMessageById(messageId);
-        if (message != null) {
-            messageRepository.delete(message);
-        }
-        return message;
+    public int deleteMessageById(int messageId) {
+        int numDeleted = messageRepository.deleteMessageTotal(messageId);
+        return numDeleted;
     }
-
-    public Message updateMessage(int messageId, Message updatedMessage) {
-        Message existingMessage = getMessageById(messageId);
-        if (existingMessage != null) {
-            existingMessage.setMessage_text(updatedMessage.getMessage_text());
-            existingMessage.setTime_posted_epoch(updatedMessage.getTime_posted_epoch());
-            messageRepository.save(existingMessage);
+    
+    public ResponseEntity<Object> updateMessage(int messageId, Message updatedMessage) {
+        Optional<Message> possibleMessage = messageRepository.findById(messageId);
+        String updatedMessageText = updatedMessage.getMessage_text();
+        if (!updatedMessageText.isBlank() && !(updatedMessageText.length() > 255) && possibleMessage.isPresent()){
+            return ResponseEntity.ok(messageRepository.updateMessageTotal(updatedMessageText , messageId));
         }
-        return existingMessage;
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public List<Message> getMessagesByUser(int postedBy) {
