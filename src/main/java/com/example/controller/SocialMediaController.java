@@ -34,12 +34,12 @@ public class SocialMediaController {
     }
 
     @PostMapping("/register") // Handle POST requests at /register
-    public Account registerUser(@RequestBody Account account) throws JsonProcessingException {
+    public ResponseEntity<Object> registerUser(@RequestBody Account account) throws JsonProcessingException {
         return accountService.registerUser(account);
     }
 
     @PostMapping("/login") // Handle POST requests at /login
-    public Account loginUser(@RequestBody Account account) throws JsonProcessingException {
+    public ResponseEntity<Object> loginUser(@RequestBody Account account) throws JsonProcessingException {
         return accountService.authenticateUser(account.getUsername(), account.getPassword());
     }
 

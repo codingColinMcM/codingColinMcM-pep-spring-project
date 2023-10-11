@@ -3,7 +3,10 @@ package com.example.service;
 import com.example.entity.Account;
 import com.example.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class AccountService {
@@ -16,16 +19,23 @@ public class AccountService {
     }
 
     // Method to register a new user
-    public Account registerUser(Account account) {
+    public ResponseEntity<Object> registerUser(Account account) {
         // Save the user using the repository
-        return accountRepository.save(account);
+        Optional<Account> possibleUser = accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+        if (!possibleUser.isPresent()){
+            return ResponseEntity.ok(accountRepository.save(account));
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     // Method to authenticate a user
-    public Account authenticateUser(String username, String password) {
-        // Implement your authentication logic using the repository
-        // Example: Find by username and password
-        return accountRepository.findByUsernameAndPassword(username, password);
+    public ResponseEntity<Object> authenticateUser(String username, String password) {
+        Optional<Account> possibleUser = accountRepository.findByUsernameAndPassword(username, password);
+        if (possibleUser.isPresent()){
+            Account realUser = possibleUser.get();
+            return ResponseEntity.ok(realUser);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
 
